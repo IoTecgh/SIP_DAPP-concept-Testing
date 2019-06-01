@@ -67,6 +67,25 @@ proofOfWork(previousBlockHash,currentBlockData){
     return nonce;
 
 }
+chainIsValid(blockchain){
+    let validChain=false
+    for(var i=1;i<blockchain.length;i++){
+        const currentBlock=blockchain[i];
+        const previousBlock=blockchain[i-1];
+        const blockHash=this.hashBlock(previousBlock['hash'],{transactions:currentBlock['transactions'],index:currentBlock['index']},currentBlock['nonce'])
+        if(currentBlock['previousBlockHash']===previousBlock['hash'])validChain=true; 
+        if(blockHash.substring(0,4)==='0000')validChain=true
+        
+    };
+const genesisBlock=blockchain[0];
+const correctNonce=genesisBlock['nonce']===77;
+const correctPrevBlockHash=genesisBlock['previousBlockHash']==='0';
+const correcthash=genesisBlock['hash']==='0';
+const correcttrx=genesisBlock['transactions'].length===0;
+if(correctNonce  || correctPrevBlockHash || correcthash || correcttrx)
+validChain=true
+return validChain;
+}
 }
 
 module.exports=Blockchain
